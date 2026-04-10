@@ -1,3 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Hollow Meridian</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+<style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
@@ -321,6 +331,7 @@
   .gcard.tall { grid-row: span 2; }
 
   .gcard svg { display: block; width: 100%; height: 100%; }
+  .gcard img { display: block; width: 100%; height: 100%; object-fit: cover; }
 
   .gcap {
     position: absolute;
@@ -547,4 +558,281 @@
     footer { flex-direction: column; gap: 1rem; padding: 1.5rem; text-align: center; }
     .socials { justify-content: center; }
   }
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="logo">Hollow Meridian</span>
+  <ul class="nav-links">
+    <li><a href="#intro">Intro</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#events">Events</a></li>
+    <li><a href="#references">References</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-text">
+    <p class="eyebrow">Debut album &mdash; out now</p>
+    <h1>Static <em>Cartography</em></h1>
+    <p class="hero-sub">Post-rock for people who get lost on purpose. Eight tracks recorded in a converted lighthouse on Saaremaa island, Estonia.</p>
+    <div class="btn-row">
+      <button class="btn-primary">Stream now</button>
+      <button class="btn-outline">Buy vinyl</button>
+    </div>
+  </div>
+  <div class="album-art">
+    <svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+      <rect width="500" height="500" fill="#042C53"/>
+      <ellipse cx="250" cy="250" rx="200" ry="138" fill="none" stroke="#185FA5" stroke-width="1.2" opacity="0.55"/>
+      <ellipse cx="250" cy="250" rx="160" ry="105" fill="none" stroke="#185FA5" stroke-width="1" opacity="0.45"/>
+      <ellipse cx="250" cy="250" rx="120" ry="74" fill="none" stroke="#378ADD" stroke-width="0.9" opacity="0.45"/>
+      <ellipse cx="250" cy="250" rx="80" ry="46" fill="none" stroke="#378ADD" stroke-width="0.9" opacity="0.55"/>
+      <ellipse cx="250" cy="250" rx="40" ry="20" fill="none" stroke="#85B7EB" stroke-width="0.8" opacity="0.65"/>
+      <line x1="0" y1="120" x2="500" y2="140" stroke="#378ADD" stroke-width="0.5" opacity="0.28"/>
+      <line x1="0" y1="195" x2="500" y2="210" stroke="#378ADD" stroke-width="0.5" opacity="0.2"/>
+      <line x1="0" y1="310" x2="500" y2="294" stroke="#378ADD" stroke-width="0.5" opacity="0.2"/>
+      <line x1="0" y1="385" x2="500" y2="370" stroke="#378ADD" stroke-width="0.5" opacity="0.28"/>
+      <circle cx="72" cy="72" r="2" fill="#85B7EB" opacity="0.3"/>
+      <circle cx="162" cy="56" r="2" fill="#85B7EB" opacity="0.3"/>
+      <circle cx="350" cy="76" r="2" fill="#85B7EB" opacity="0.3"/>
+      <circle cx="432" cy="62" r="2" fill="#85B7EB" opacity="0.3"/>
+      <circle cx="58" cy="430" r="2" fill="#85B7EB" opacity="0.3"/>
+      <circle cx="440" cy="420" r="2" fill="#85B7EB" opacity="0.3"/>
+      <circle cx="455" cy="186" r="2" fill="#85B7EB" opacity="0.3"/>
+      <circle cx="44" cy="312" r="2" fill="#85B7EB" opacity="0.3"/>
+      <text x="250" y="476" text-anchor="middle" fill="#B5D4F4" font-size="10" letter-spacing="5" font-family="'DM Mono', monospace" opacity="0.55" font-weight="300">HOLLOW MERIDIAN</text>
+    </svg>
+  </div>
+</div>
+
+<!-- INTRODUCTION -->
+<section id="intro">
+  <div class="intro-grid">
+    <div class="intro-sticky reveal">
+      <p class="sec-label">Introduction</p>
+      <p class="sec-title">Who we are</p>
+      <div class="stats">
+        <div class="stat"><div class="stat-val">8</div><div class="stat-lbl">Tracks</div></div>
+        <div class="stat"><div class="stat-val">43'</div><div class="stat-lbl">Runtime</div></div>
+        <div class="stat"><div class="stat-val">2019</div><div class="stat-lbl">Founded</div></div>
+      </div>
+      <div class="members-grid" style="margin-top:1px;">
+        <div class="member">
+          <div class="av">MR</div>
+          <div class="member-name">Maires Ribi</div>
+          <div class="member-role">Vocals / Guitar</div>
+        </div>
+        <div class="member">
+          <div class="av">TR</div>
+          <div class="member-name">Toimas Ribi</div>
+          <div class="member-role">Bass</div>
+        </div>
+        <div class="member">
+          <div class="av">PP</div>
+          <div class="member-name">Peeter Porgand</div>
+          <div class="member-role">Drums</div>
+        </div>
+        <div class="member">
+          <div class="av">KK</div>
+          <div class="member-name">Kalle Kartul</div>
+          <div class="member-role">Synths</div>
+        </div>
+      </div>
+    </div>
+    <div class="intro-body reveal">
+      <p>Hollow Meridian formed in 2019 in a basement on Telliskivi Street, Tallinn &mdash; four friends who couldn't agree on anything except that music should feel like standing at the edge of something large.</p>
+      <p>Their sound pulls from Estonian folk harmonics, motorik rhythm, and the silence between radio stations &mdash; what vocalist Kira Voss calls &ldquo;the frequency between frequencies.&rdquo; Where most post-rock bands build to catharsis, Hollow Meridian stops just short. The tension is the point.</p>
+      <p>Static Cartography, their debut full-length, was recorded over three consecutive winters in a decommissioned lighthouse on Saaremaa island. Tere Karl. No click tracks. No overdubs sent over the internet. Every sound in the same room, at the same time, in the same cold.</p>
+      <p>The album takes its name from a dead reckoning technique &mdash; navigating by the last known position when all signals fail. Each track is a leg of that journey, moving forward without knowing exactly where forward leads.</p>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <p class="sec-label reveal">Gallery</p>
+  <p class="sec-title reveal">Photos</p>
+  <div class="gallery-mosaic" id="gallery-mosaic"></div>
+</section>
+
+<!-- EVENTS -->
+<section id="events">
+  <p class="sec-label reveal">Events</p>
+  <p class="sec-title reveal">Upcoming shows</p>
+  <div id="event-list"></div>
+</section>
+
+<!-- REFERENCES -->
+<section id="references">
+  <p class="sec-label reveal">References</p>
+  <p class="sec-title reveal">Press &amp; reviews</p>
+  <div class="refs-grid" id="refs-grid"></div>
+</section>
+
+<footer>
+  <span class="foot-logo">Hollow Meridian &copy; 2025</span>
+  <div class="socials">
+    <a href="#">Instagram</a>
+    <a href="#">Spotify</a>
+    <a href="#">Bandcamp</a>
+    <a href="#">Booking</a>
+  </div>
+</footer>
+
+<script>
+/* ── GALLERY ── */
+const photos = [
+  { wide: false,  h: 280, src: "public/Band_pic.png", cap: "Band picture — Tallinn, Nov 2024" },
+  { wide: false,  h: 280, src: "public/Stage_pic_1.png", cap: "Stage performance" },
+  { wide: false,  h: 280, src: "public/Stage_pic_2.png", cap: "Stage performance" },
+];
+
+const mosaic = document.getElementById("gallery-mosaic");
+photos.forEach((p, i) => {
+  const w = p.wide ? 660 : 320;
+  const div = document.createElement("div");
+  div.className = "gcard reveal" + (p.wide ? " wide" : "");
+  div.style.height = p.h + "px";
+  if (p.src) {
+    div.innerHTML = `
+    <img src="${p.src}" alt="${p.cap}">
+    <div class="gcap">${p.cap}</div>`;
+    mosaic.appendChild(div);
+    return;
+  }
+
+  div.innerHTML = `
+    <svg viewBox="0 0 ${w} ${p.h}" xmlns="http://www.w3.org/2000/svg">
+      <rect width="${w}" height="${p.h}" fill="${p.bg}"/>
+      <line x1="0" y1="${p.h*0.28}" x2="${w}" y2="${p.h*0.33}" stroke="${p.stroke}" stroke-width="0.7" opacity="0.4"/>
+      <line x1="0" y1="${p.h*0.62}" x2="${w}" y2="${p.h*0.59}" stroke="${p.stroke}" stroke-width="0.7" opacity="0.28"/>
+      <ellipse cx="${w*0.5}" cy="${p.h*0.48}" rx="${w*0.28}" ry="${p.h*0.24}" fill="none" stroke="${p.accent}" stroke-width="0.9" opacity="0.4"/>
+      <ellipse cx="${w*0.5}" cy="${p.h*0.48}" rx="${w*0.16}" ry="${p.h*0.13}" fill="none" stroke="${p.accent}" stroke-width="0.7" opacity="0.5"/>
+      <circle cx="${w*0.12}" cy="${p.h*0.15}" r="1.8" fill="${p.accent}" opacity="0.32"/>
+      <circle cx="${w*0.88}" cy="${p.h*0.12}" r="1.8" fill="${p.accent}" opacity="0.32"/>
+      <circle cx="${w*0.05}" cy="${p.h*0.85}" r="1.8" fill="${p.accent}" opacity="0.25"/>
+      <circle cx="${w*0.95}" cy="${p.h*0.82}" r="1.8" fill="${p.accent}" opacity="0.25"/>
+      <text x="14" y="${p.h-13}" fill="${p.accent}" font-size="9" font-family="'DM Mono',monospace" font-weight="300" opacity="0.55" letter-spacing="1">${p.cap}</text>
+    </svg>
+    <div class="gcap">${p.cap}</div>`;
+  mosaic.appendChild(div);
+});
+
+/* ── EVENTS ── */
+const events = [
+  { month:"Apr", day:"18", city:"Tallinn, Estonia",       venue:"Kultuurikatel",     status:"sold" },
+  { month:"Apr", day:"25", city:"Helsinki, Finland",       venue:"Tavastia Club",     status:"few"  },
+  { month:"May", day:"03", city:"Riga, Latvia",            venue:"Palladium",         status:"avail"},
+  { month:"May", day:"11", city:"Berlin, Germany",         venue:"Lido",              status:"avail"},
+  { month:"May", day:"19", city:"Amsterdam, Netherlands",  venue:"Paradiso",          status:"avail"},
+  { month:"Jun", day:"07", city:"London, United Kingdom",  venue:"Scala",             status:"avail"},
+  { month:"Jun", day:"21", city:"Kuressaare, Estonia",     venue:"Keset KG metsa",   status:"few"  },
+  { month:"Jul", day:"04", city:"Copenhagen, Denmark",     venue:"Vega",              status:"avail"},
+];
+
+const tagLabel = { sold:"Sold out", few:"Few left", avail:"Tickets" };
+const tagClass  = { sold:"tag-sold",  few:"tag-few",  avail:"tag-avail" };
+
+const eList = document.getElementById("event-list");
+events.forEach((e, i) => {
+  const row = document.createElement("div");
+  row.className = "event-row reveal";
+  const action = e.status === "sold"
+    ? `<span class="event-tag ${tagClass[e.status]}">${tagLabel[e.status]}</span>`
+    : `<button class="tickets-btn">${tagLabel[e.status]}</button>`;
+  row.innerHTML = `
+    <div class="date-box">
+      <div class="date-month">${e.month}</div>
+      <div class="date-day">${e.day}</div>
+    </div>
+    <div class="event-info">
+      <div class="event-city">${e.city}</div>
+      <div class="event-venue">${e.venue}</div>
+    </div>
+    ${action}`;
+  eList.appendChild(row);
+});
+
+/* ── REFERENCES ── */
+const refs = [
+  {
+    score: "8.2 / 10", pub: " ",
+    body: "Like Sigur Rós if they grew up on the Baltic Sea and didn't believe in resolution. Static Cartography is an album about the unbearable weight of almost.",
+    author: "— Anna Holt, Pitchfork"
+  },
+  {
+    score: "9 / 10", pub: " ",
+    body: "Hollow Meridian understand that the best post-rock has always been about restraint, not release. They've made something genuinely unusual here.",
+    author: "— James Pryor, The Wire"
+  },
+  {
+    score: "8 / 10", pub: " ",
+    body: "A debut that sounds fully formed and quietly devastating. Kira Voss's voice is the lighthouse the album is named after — distant, guiding, cold.",
+    author: "— Karlsson katuselt"
+  },
+  {
+    score: "8.5 / 10", pub: " ",
+    body: "Dance music this is not, but the rhythmic intelligence Marika Saar brings to the kit makes Static Cartography essential listening across genres.",
+    author: "— Karl Gregor Rauniste"
+  },
+];
+
+const rGrid = document.getElementById("refs-grid");
+refs.forEach(r => {
+  const card = document.createElement("div");
+  card.className = "ref-card reveal";
+  card.innerHTML = `
+    <div class="ref-score">${r.score}</div>
+    <div class="ref-pub">${r.pub}</div>
+    <div class="ref-body">${r.body}</div>
+    <div class="ref-author">${r.author}</div>`;
+  rGrid.appendChild(card);
+});
+
+/* ── SCROLL REVEAL ── */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("visible"); observer.unobserve(e.target); } });
+}, { threshold: 0.1 });
+
+document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
