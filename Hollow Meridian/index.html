@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Hollow Meridian</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #08090c;
+    --bg2: #0f1117;
+    --bg3: #161820;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.14);
+    --text: #e8e6df;
+    --muted: #7a7870;
+    --hint: #3e3d3a;
+    --blue: #2a5fa5;
+    --blue-light: #85b7eb;
+    --blue-mid: #378add;
+    --blue-dark: #042c53;
+    --garamond: 'EB Garamond', Georgia, serif;
+    --mono: 'DM Mono', monospace;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--garamond);
+    font-size: 17px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  ::selection { background: var(--blue); color: #fff; }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.1rem 3rem;
+    border-bottom: 0.5px solid var(--border);
+    background: rgba(8,9,12,0.88);
+    backdrop-filter: blur(12px);
+  }
+
+  .logo {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 300;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--blue-light);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.25rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 300;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--text); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 0 3rem;
+    gap: 4rem;
+    border-bottom: 0.5px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 70% 50%, rgba(42,95,165,0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 60% at 20% 80%, rgba(4,44,83,0.18) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .hero-text { position: relative; z-index: 1; }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--blue-light);
+    margin-bottom: 1.25rem;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.1s ease forwards;
+  }
+
+  .hero h1 {
+    font-size: clamp(48px, 6vw, 80px);
+    font-weight: 400;
+    line-height: 1.02;
+    letter-spacing: -0.01em;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.25s ease forwards;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--muted);
+  }
+
+  .hero-sub {
+    font-size: 16px;
+    color: var(--muted);
+    line-height: 1.75;
+    max-width: 420px;
+    margin-bottom: 2.25rem;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.4s ease forwards;
+  }
+
+  .btn-row {
+    display: flex;
+    gap: 12px;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.55s ease forwards;
+  }
+
+  .btn-primary {
+    padding: 11px 26px;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 300;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    background: var(--blue-light);
+    color: var(--blue-dark);
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+
+  .btn-primary:hover { opacity: 0.82; }
+
+  .btn-outline {
+    padding: 11px 26px;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 300;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    background: transparent;
+    color: var(--text);
+    border: 0.5px solid var(--border2);
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .btn-outline:hover { border-color: var(--blue-light); color: var(--blue-light); }
+
+  /* Album art */
+  .album-art {
+    position: relative;
+    z-index: 1;
+    aspect-ratio: 1;
+    border: 0.5px solid var(--border2);
+    overflow: hidden;
+    opacity: 0;
+    animation: fadeIn 1.1s 0.3s ease forwards;
+  }
+
+  .album-art svg { display: block; width: 100%; height: 100%; }
+
+  /* ── SECTIONS COMMON ── */
+  section {
+    padding: 6rem 3rem;
+    border-bottom: 0.5px solid var(--border);
+  }
+
+  .sec-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--blue-light);
+    margin-bottom: 0.5rem;
+  }
+
+  .sec-title {
+    font-size: 36px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    margin-bottom: 3rem;
+    line-height: 1.1;
+  }
+
+  /* ── INTRO ── */
+  .intro-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .intro-sticky { position: sticky; top: 6rem; }
+
+  .intro-body p {
+    font-size: 16px;
+    color: #a8a49c;
+    line-height: 1.85;
+    margin-bottom: 1.1rem;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 0.5px solid var(--border);
+    margin-top: 2.5rem;
+  }
+
+  .stat {
+    background: var(--bg2);
+    padding: 1.25rem 1rem;
+    text-align: center;
+  }
+
+  .stat-val {
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--blue-light);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .stat-lbl {
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 300;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .members-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 0.5px solid var(--border);
+    margin-top: 2.5rem;
+  }
+
+  .member {
+    background: var(--bg2);
+    padding: 1.5rem 1rem;
+    text-align: center;
+    transition: background 0.2s;
+  }
+
+  .member:hover { background: var(--bg3); }
+
+  .av {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    margin: 0 auto 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 300;
+    border: 0.5px solid var(--border2);
+    color: var(--blue-light);
+    background: rgba(42,95,165,0.15);
+  }
+
+  .member-name {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 3px;
+  }
+
+  .member-role {
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  /* ── GALLERY ── */
+  .gallery-mosaic {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto auto;
+    gap: 8px;
+  }
+
+  .gcard { position: relative; overflow: hidden; border: 0.5px solid var(--border); cursor: pointer; }
+  .gcard.wide { grid-column: span 2; }
+  .gcard.tall { grid-row: span 2; }
+
+  .gcard svg { display: block; width: 100%; height: 100%; }
+
+  .gcap {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 10px 14px;
+    background: linear-gradient(transparent, rgba(4,12,24,0.82));
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    color: var(--blue-light);
+    text-transform: uppercase;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .gcard:hover .gcap { opacity: 1; }
+
+  /* ── EVENTS ── */
+  .event-row {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    padding: 1.25rem 0;
+    border-bottom: 0.5px solid var(--border);
+    transition: background 0.15s;
+  }
+
+  .event-row:first-of-type { border-top: 0.5px solid var(--border); }
+
+  .event-row:hover { background: rgba(255,255,255,0.02); }
+
+  .date-box {
+    min-width: 52px;
+    text-align: center;
+    border: 0.5px solid var(--border2);
+    padding: 8px 10px;
+    background: var(--bg2);
+  }
+
+  .date-month {
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 300;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .date-day {
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--blue-light);
+    line-height: 1.1;
+  }
+
+  .event-info { flex: 1; }
+
+  .event-city {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 2px;
+  }
+
+  .event-venue {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 300;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+
+  .event-tag {
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 300;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border: 0.5px solid;
+  }
+
+  .tag-sold { color: #c46b54; border-color: rgba(196,107,84,0.3); background: rgba(196,107,84,0.08); }
+  .tag-few  { color: #c4a054; border-color: rgba(196,160,84,0.3); background: rgba(196,160,84,0.08); }
+  .tag-avail{ color: var(--blue-light); border-color: rgba(133,183,235,0.3); background: rgba(133,183,235,0.08); }
+
+  .tickets-btn {
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 300;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    background: transparent;
+    color: var(--blue-light);
+    border: 0.5px solid rgba(133,183,235,0.3);
+    padding: 7px 16px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  .tickets-btn:hover { background: rgba(133,183,235,0.1); border-color: var(--blue-light); }
+
+  /* ── REFERENCES ── */
+  .refs-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 0.5px solid var(--border);
+  }
+
+  .ref-card {
+    background: var(--bg2);
+    padding: 2rem;
+    transition: background 0.2s;
+  }
+
+  .ref-card:hover { background: var(--bg3); }
+
+  .ref-score {
+    font-size: 42px;
+    font-weight: 400;
+    color: var(--blue-light);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .ref-pub {
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 300;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1.25rem;
+  }
+
+  .ref-body {
+    font-size: 15px;
+    font-style: italic;
+    color: #a8a49c;
+    line-height: 1.7;
+    border-left: 1px solid var(--blue);
+    padding-left: 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .ref-author {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 300;
+    letter-spacing: 0.08em;
+    color: var(--hint);
+    font-style: normal;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 2rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 0.5px solid var(--border);
+  }
+
+  .foot-logo {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 300;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--hint);
+  }
+
+  .socials { display: flex; gap: 2rem; }
+
+  .socials a {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 300;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .socials a:hover { color: var(--blue-light); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { gap: 1.25rem; }
+    .hero { grid-template-columns: 1fr; padding: 4rem 1.5rem; min-height: auto; gap: 2.5rem; }
+    section { padding: 4rem 1.5rem; }
+    .intro-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .intro-sticky { position: static; }
+    .members-grid { grid-template-columns: repeat(2, 1fr); }
+    .gallery-mosaic { grid-template-columns: 1fr 1fr; }
+    .gcard.wide { grid-column: span 2; }
+    .refs-grid { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 1rem; padding: 1.5rem; text-align: center; }
+    .socials { justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="logo">Hollow Meridian</span>
+  <ul class="nav-links">
+    <li><a href="#intro">Intro</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#events">Events</a></li>
+    <li><a href="#references">References</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-text">
+    <p class="eyebrow">Debut album &mdash; out now</p>
+    <h1>Static <em>Cartography</em></h1>
+    <p class="hero-sub">Post-rock for people who get lost on purpose. Eight tracks recorded in a converted lighthouse on Saaremaa island, Estonia.</p>
+    <div class="btn-row">
+      <button class="btn-primary">Stream now</button>
+      <button class="btn-outline">Buy vinyl</button>
+    </div>
+  </div>
+  <div class="album-art">
+    <svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+      <rect width="500" height="500" fill="#042C53"/>
+      <ellipse cx="250" cy="250" rx="200" ry="138" fill="none" stroke="#185FA5" stroke-width="1.2" opacity="0.55"/>
+      <ellipse cx="250" cy="250" rx="160" ry="105" fill="none" stroke="#185FA5" stroke-width="1" opacity="0.45"/>
+      <ellipse cx="250" cy="250" rx="120" ry="74" fill="none" stroke="#378ADD" stroke-width="0.9" opacity="0.45"/>
+      <ellipse cx="250" cy="250" rx="80" ry="46" fill="none" stroke="#378ADD" stroke-width="0.9" opacity="0.55"/>
+      <ellipse cx="250" cy="250" rx="40" ry="20" fill="none" stroke="#85B7EB" stroke-width="0.8" opacity="0.65"/>
+      <line x1="0" y1="120" x2="500" y2="140" stroke="#378ADD" stroke-width="0.5" opacity="0.28"/>
+      <line x1="0" y1="195" x2="500" y2="210" stroke="#378ADD" stroke-width="0.5" opacity="0.2"/>
+      <line x1="0" y1="310" x2="500" y2="294" stroke="#378ADD" stroke-width="0.5" opacity="0.2"/>
+      <line x1="0" y1="385" x2="500" y2="370" stroke="#378ADD" stroke-width="0.5" opacity="0.28"/>
+      <circle cx="72" cy="72" r="2" fill="#85B7EB" opacity="0.3"/>
+      <circle cx="162" cy="56" r="2" fill="#85B7EB" opacity="0.3"/>
+      <circle cx="350" cy="76" r="2" fill="#85B7EB" opacity="0.3"/>
+      <circle cx="432" cy="62" r="2" fill="#85B7EB" opacity="0.3"/>
+      <circle cx="58" cy="430" r="2" fill="#85B7EB" opacity="0.3"/>
+      <circle cx="440" cy="420" r="2" fill="#85B7EB" opacity="0.3"/>
+      <circle cx="455" cy="186" r="2" fill="#85B7EB" opacity="0.3"/>
+      <circle cx="44" cy="312" r="2" fill="#85B7EB" opacity="0.3"/>
+      <text x="250" y="476" text-anchor="middle" fill="#B5D4F4" font-size="10" letter-spacing="5" font-family="'DM Mono', monospace" opacity="0.55" font-weight="300">HOLLOW MERIDIAN</text>
+    </svg>
+  </div>
+</div>
+
+<!-- INTRODUCTION -->
+<section id="intro">
+  <div class="intro-grid">
+    <div class="intro-sticky reveal">
+      <p class="sec-label">Introduction</p>
+      <p class="sec-title">Who we are</p>
+      <div class="stats">
+        <div class="stat"><div class="stat-val">8</div><div class="stat-lbl">Tracks</div></div>
+        <div class="stat"><div class="stat-val">43'</div><div class="stat-lbl">Runtime</div></div>
+        <div class="stat"><div class="stat-val">2019</div><div class="stat-lbl">Founded</div></div>
+      </div>
+      <div class="members-grid" style="margin-top:1px;">
+        <div class="member">
+          <div class="av">KV</div>
+          <div class="member-name">Maires Ribi</div>
+          <div class="member-role">Vocals / Guitar</div>
+        </div>
+        <div class="member">
+          <div class="av">OL</div>
+          <div class="member-name">Toimas Ribi</div>
+          <div class="member-role">Bass</div>
+        </div>
+        <div class="member">
+          <div class="av">MS</div>
+          <div class="member-name">69</div>
+          <div class="member-role">Drums</div>
+        </div>
+        <div class="member">
+          <div class="av">TR</div>
+          <div class="member-name"></div>
+          <div class="member-role">Synths</div>
+        </div>
+      </div>
+    </div>
+    <div class="intro-body reveal">
+      <p>Hollow Meridian formed in 2019 in a basement on Telliskivi Street, Tallinn &mdash; four friends who couldn't agree on anything except that music should feel like standing at the edge of something large.</p>
+      <p>Their sound pulls from Estonian folk harmonics, motorik rhythm, and the silence between radio stations &mdash; what vocalist Kira Voss calls &ldquo;the frequency between frequencies.&rdquo; Where most post-rock bands build to catharsis, Hollow Meridian stops just short. The tension is the point.</p>
+      <p>Static Cartography, their debut full-length, was recorded over three consecutive winters in a decommissioned lighthouse on Saaremaa island. No click tracks. No overdubs sent over the internet. Every sound in the same room, at the same time, in the same cold.</p>
+      <p>The album takes its name from a dead reckoning technique &mdash; navigating by the last known position when all signals fail. Each track is a leg of that journey, moving forward without knowing exactly where forward leads.</p>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <p class="sec-label reveal">Gallery</p>
+  <p class="sec-title reveal">Photos</p>
+  <div class="gallery-mosaic" id="gallery-mosaic"></div>
+</section>
+
+<!-- EVENTS -->
+<section id="events">
+  <p class="sec-label reveal">Events</p>
+  <p class="sec-title reveal">Upcoming shows</p>
+  <div id="event-list"></div>
+</section>
+
+<!-- REFERENCES -->
+<section id="references">
+  <p class="sec-label reveal">References</p>
+  <p class="sec-title reveal">Press &amp; reviews</p>
+  <div class="refs-grid" id="refs-grid"></div>
+</section>
+
+<footer>
+  <span class="foot-logo">Hollow Meridian &copy; 2025</span>
+  <div class="socials">
+    <a href="#">Instagram</a>
+    <a href="#">Spotify</a>
+    <a href="#">Bandcamp</a>
+    <a href="#">Booking</a>
+  </div>
+</footer>
+
+<script>
+/* ── GALLERY ── */
+const photos = [
+  { wide: true,  h: 280, bg: "#042C53", stroke: "#185FA5", accent: "#85B7EB", cap: "Live at Kultuurikatel — Tallinn, Nov 2024" },
+  { wide: false, h: 280, bg: "#04342C", stroke: "#1D9E75", accent: "#9FE1CB", cap: "Lighthouse sessions — Saaremaa, Jan 2024" },
+  { wide: false, h: 280, bg: "#26215C", stroke: "#534AB7", accent: "#AFA9EC", cap: "Studio portrait — Tallinn, Mar 2024" },
+  { wide: false, h: 220, bg: "#4A1B0C", stroke: "#993C1D", accent: "#F5C4B3", cap: "Soundcheck — Helsinki, Apr 2025" },
+  { wide: false, h: 220, bg: "#412402", stroke: "#854F0B", accent: "#FAC775", cap: "Rooftop session — Old Town, 2023" },
+  { wide: false, h: 220, bg: "#0F2040", stroke: "#2a5fa5", accent: "#85B7EB", cap: "Paradiso soundcheck — Amsterdam, May 2025" },
+];
+
+const mosaic = document.getElementById("gallery-mosaic");
+photos.forEach((p, i) => {
+  const w = p.wide ? 660 : 320;
+  const div = document.createElement("div");
+  div.className = "gcard reveal" + (p.wide ? " wide" : "");
+  div.style.height = p.h + "px";
+  div.innerHTML = `
+    <svg viewBox="0 0 ${w} ${p.h}" xmlns="http://www.w3.org/2000/svg">
+      <rect width="${w}" height="${p.h}" fill="${p.bg}"/>
+      <line x1="0" y1="${p.h*0.28}" x2="${w}" y2="${p.h*0.33}" stroke="${p.stroke}" stroke-width="0.7" opacity="0.4"/>
+      <line x1="0" y1="${p.h*0.62}" x2="${w}" y2="${p.h*0.59}" stroke="${p.stroke}" stroke-width="0.7" opacity="0.28"/>
+      <ellipse cx="${w*0.5}" cy="${p.h*0.48}" rx="${w*0.28}" ry="${p.h*0.24}" fill="none" stroke="${p.accent}" stroke-width="0.9" opacity="0.4"/>
+      <ellipse cx="${w*0.5}" cy="${p.h*0.48}" rx="${w*0.16}" ry="${p.h*0.13}" fill="none" stroke="${p.accent}" stroke-width="0.7" opacity="0.5"/>
+      <circle cx="${w*0.12}" cy="${p.h*0.15}" r="1.8" fill="${p.accent}" opacity="0.32"/>
+      <circle cx="${w*0.88}" cy="${p.h*0.12}" r="1.8" fill="${p.accent}" opacity="0.32"/>
+      <circle cx="${w*0.05}" cy="${p.h*0.85}" r="1.8" fill="${p.accent}" opacity="0.25"/>
+      <circle cx="${w*0.95}" cy="${p.h*0.82}" r="1.8" fill="${p.accent}" opacity="0.25"/>
+      <text x="14" y="${p.h-13}" fill="${p.accent}" font-size="9" font-family="'DM Mono',monospace" font-weight="300" opacity="0.55" letter-spacing="1">${p.cap}</text>
+    </svg>
+    <div class="gcap">${p.cap}</div>`;
+  mosaic.appendChild(div);
+});
+
+/* ── EVENTS ── */
+const events = [
+  { month:"Apr", day:"18", city:"Tallinn, Estonia",       venue:"Kultuurikatel",     status:"sold" },
+  { month:"Apr", day:"25", city:"Helsinki, Finland",       venue:"Tavastia Club",     status:"few"  },
+  { month:"May", day:"03", city:"Riga, Latvia",            venue:"Palladium",         status:"avail"},
+  { month:"May", day:"11", city:"Berlin, Germany",         venue:"Lido",              status:"avail"},
+  { month:"May", day:"19", city:"Amsterdam, Netherlands",  venue:"Paradiso",          status:"avail"},
+  { month:"Jun", day:"07", city:"London, United Kingdom",  venue:"Scala",             status:"avail"},
+  { month:"Jun", day:"21", city:"Paris, France",           venue:"La Maroquinerie",   status:"few"  },
+  { month:"Jul", day:"04", city:"Copenhagen, Denmark",     venue:"Vega",              status:"avail"},
+];
+
+const tagLabel = { sold:"Sold out", few:"Few left", avail:"Tickets" };
+const tagClass  = { sold:"tag-sold",  few:"tag-few",  avail:"tag-avail" };
+
+const eList = document.getElementById("event-list");
+events.forEach((e, i) => {
+  const row = document.createElement("div");
+  row.className = "event-row reveal";
+  const action = e.status === "sold"
+    ? `<span class="event-tag ${tagClass[e.status]}">${tagLabel[e.status]}</span>`
+    : `<button class="tickets-btn">${tagLabel[e.status]}</button>`;
+  row.innerHTML = `
+    <div class="date-box">
+      <div class="date-month">${e.month}</div>
+      <div class="date-day">${e.day}</div>
+    </div>
+    <div class="event-info">
+      <div class="event-city">${e.city}</div>
+      <div class="event-venue">${e.venue}</div>
+    </div>
+    ${action}`;
+  eList.appendChild(row);
+});
+
+/* ── REFERENCES ── */
+const refs = [
+  {
+    score: "8.2 / 10", pub: "Pitchfork",
+    body: "Like Sigur Rós if they grew up on the Baltic Sea and didn't believe in resolution. Static Cartography is an album about the unbearable weight of almost.",
+    author: "— Anna Holt, Pitchfork"
+  },
+  {
+    score: "9 / 10", pub: "The Wire",
+    body: "Hollow Meridian understand that the best post-rock has always been about restraint, not release. They've made something genuinely unusual here.",
+    author: "— James Pryor, The Wire"
+  },
+  {
+    score: "8 / 10", pub: "Uncut Magazine",
+    body: "A debut that sounds fully formed and quietly devastating. Kira Voss's voice is the lighthouse the album is named after — distant, guiding, cold.",
+    author: "— Uncut Magazine"
+  },
+  {
+    score: "8.5 / 10", pub: "Resident Advisor",
+    body: "Dance music this is not, but the rhythmic intelligence Marika Saar brings to the kit makes Static Cartography essential listening across genres.",
+    author: "— RA Review"
+  },
+];
+
+const rGrid = document.getElementById("refs-grid");
+refs.forEach(r => {
+  const card = document.createElement("div");
+  card.className = "ref-card reveal";
+  card.innerHTML = `
+    <div class="ref-score">${r.score}</div>
+    <div class="ref-pub">${r.pub}</div>
+    <div class="ref-body">${r.body}</div>
+    <div class="ref-author">${r.author}</div>`;
+  rGrid.appendChild(card);
+});
+
+/* ── SCROLL REVEAL ── */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("visible"); observer.unobserve(e.target); } });
+}, { threshold: 0.1 });
+
+document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
