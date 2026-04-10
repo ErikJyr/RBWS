@@ -331,6 +331,7 @@
   .gcard.tall { grid-row: span 2; }
 
   .gcard svg { display: block; width: 100%; height: 100%; }
+  .gcard img { display: block; width: 100%; height: 100%; object-fit: cover; }
 
   .gcap {
     position: absolute;
@@ -684,7 +685,7 @@
 <script>
 /* ── GALLERY ── */
 const photos = [
-  { wide: true,  h: 280, bg: "#042C53", stroke: "#185FA5", accent: "#85B7EB", cap: "Live at Kultuurikatel — Tallinn, Nov 2024" },
+  { wide: false,  h: 280, src: "public/Band_pic.png", cap: "Band picture — Tallinn, Nov 2024" },
   { wide: false, h: 280, bg: "#04342C", stroke: "#1D9E75", accent: "#9FE1CB", cap: "Lighthouse sessions — Saaremaa, Jan 2024" },
   { wide: false, h: 280, bg: "#26215C", stroke: "#534AB7", accent: "#AFA9EC", cap: "Studio portrait — Tallinn, Mar 2024" },
   { wide: false, h: 220, bg: "#4A1B0C", stroke: "#993C1D", accent: "#F5C4B3", cap: "Soundcheck — Helsinki, Apr 2025" },
@@ -698,6 +699,14 @@ photos.forEach((p, i) => {
   const div = document.createElement("div");
   div.className = "gcard reveal" + (p.wide ? " wide" : "");
   div.style.height = p.h + "px";
+  if (p.src) {
+    div.innerHTML = `
+    <img src="${p.src}" alt="${p.cap}">
+    <div class="gcap">${p.cap}</div>`;
+    mosaic.appendChild(div);
+    return;
+  }
+
   div.innerHTML = `
     <svg viewBox="0 0 ${w} ${p.h}" xmlns="http://www.w3.org/2000/svg">
       <rect width="${w}" height="${p.h}" fill="${p.bg}"/>
