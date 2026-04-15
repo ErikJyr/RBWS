@@ -38,21 +38,27 @@
     overflow-x: hidden;
   }
 
+  body.menu-open { overflow: hidden; }
+
   ::selection { background: var(--blue); color: #fff; }
 
   /* ── NAV ── */
   nav {
     position: sticky;
     top: 0;
-    z-index: 100;
+    z-index: 200;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 1.1rem 3rem;
     border-bottom: 0.5px solid var(--border);
-    background: rgba(8,9,12,0.88);
-    backdrop-filter: blur(12px);
+    background: rgba(8,9,12,0.92);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    transition: padding 0.35s cubic-bezier(0.22,1,0.36,1);
   }
+
+  nav.scrolled { padding-top: 0.65rem; padding-bottom: 0.65rem; }
 
   .logo {
     font-family: var(--mono);
@@ -61,7 +67,19 @@
     letter-spacing: 0.22em;
     text-transform: uppercase;
     color: var(--blue-light);
+    position: relative;
   }
+
+  .logo::after {
+    content: '';
+    position: absolute;
+    bottom: -2px; left: 0;
+    width: 0; height: 0.5px;
+    background: var(--blue-light);
+    transition: width 0.4s ease;
+  }
+
+  nav:hover .logo::after { width: 100%; }
 
   .nav-links {
     display: flex;
@@ -77,10 +95,112 @@
     text-transform: uppercase;
     color: var(--muted);
     text-decoration: none;
+    position: relative;
     transition: color 0.2s;
   }
 
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -3px; left: 0;
+    width: 0; height: 0.5px;
+    background: var(--blue-light);
+    transition: width 0.25s ease;
+  }
+
   .nav-links a:hover { color: var(--text); }
+  .nav-links a:hover::after { width: 100%; }
+
+  /* ── HAMBURGER ── */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 6px;
+    background: none;
+    border: none;
+    z-index: 300;
+  }
+
+  .hamburger span {
+    display: block;
+    width: 22px;
+    height: 0.5px;
+    background: var(--blue-light);
+    transition: transform 0.35s cubic-bezier(0.22,1,0.36,1),
+                opacity 0.25s ease,
+                width 0.25s ease;
+    transform-origin: center;
+  }
+
+  .hamburger.active span:nth-child(1) { transform: translateY(5.5px) rotate(45deg); }
+  .hamburger.active span:nth-child(2) { opacity: 0; width: 0; }
+  .hamburger.active span:nth-child(3) { transform: translateY(-5.5px) rotate(-45deg); }
+
+  /* ── MOBILE MENU OVERLAY ── */
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 150;
+    background: rgba(8,9,12,0.97);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    opacity: 0;
+    transform: translateY(-12px);
+    transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.22,1,0.36,1);
+    pointer-events: none;
+  }
+
+  .mobile-menu.open {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: all;
+  }
+
+  .mobile-menu a {
+    font-family: var(--garamond);
+    font-size: clamp(34px, 9vw, 52px);
+    font-weight: 400;
+    font-style: italic;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 0.55rem 2rem;
+    display: block;
+    text-align: center;
+    transition: color 0.2s;
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  .mobile-menu.open a { animation: menuItemIn 0.45s cubic-bezier(0.22,1,0.36,1) forwards; }
+  .mobile-menu.open a:nth-child(1) { animation-delay: 0.07s; }
+  .mobile-menu.open a:nth-child(2) { animation-delay: 0.14s; }
+  .mobile-menu.open a:nth-child(3) { animation-delay: 0.21s; }
+  .mobile-menu.open a:nth-child(4) { animation-delay: 0.28s; }
+
+  .mobile-menu a:hover { color: var(--blue-light); }
+
+  @keyframes menuItemIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Mobile menu decorative line */
+  .mobile-menu::before {
+    content: '';
+    position: absolute;
+    width: 1px;
+    height: 60px;
+    background: var(--border2);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -220%);
+  }
 
   /* ── HERO ── */
   .hero {
@@ -100,9 +220,32 @@
     position: absolute;
     inset: 0;
     background:
-      radial-gradient(ellipse 60% 50% at 70% 50%, rgba(42,95,165,0.12) 0%, transparent 70%),
-      radial-gradient(ellipse 40% 60% at 20% 80%, rgba(4,44,83,0.18) 0%, transparent 60%);
+      radial-gradient(ellipse 60% 50% at 70% 50%, rgba(42,95,165,0.13) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 60% at 20% 80%, rgba(4,44,83,0.2) 0%, transparent 60%);
     pointer-events: none;
+    animation: ambientPulse 9s ease-in-out infinite alternate;
+  }
+
+  @keyframes ambientPulse {
+    from { opacity: 0.65; transform: scale(1); }
+    to   { opacity: 1;    transform: scale(1.04); }
+  }
+
+  /* Scan line */
+  .hero::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0;
+    top: -1px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(133,183,235,0.22) 50%, transparent 100%);
+    animation: scanLine 7s linear infinite;
+    pointer-events: none;
+  }
+
+  @keyframes scanLine {
+    from { top: 0%; }
+    to   { top: 100%; }
   }
 
   .hero-text { position: relative; z-index: 1; }
@@ -116,23 +259,36 @@
     color: var(--blue-light);
     margin-bottom: 1.25rem;
     opacity: 0;
-    animation: fadeUp 0.7s 0.1s ease forwards;
+    animation: fadeUp 0.8s 0.15s cubic-bezier(0.22,1,0.36,1) forwards;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 0;
+    height: 0.5px;
+    background: var(--blue-light);
+    animation: lineGrow 0.6s 0.55s ease forwards;
+  }
+
+  @keyframes lineGrow {
+    to { width: 24px; }
   }
 
   .hero h1 {
-    font-size: clamp(48px, 6vw, 80px);
+    font-size: clamp(44px, 6vw, 80px);
     font-weight: 400;
     line-height: 1.02;
     letter-spacing: -0.01em;
     margin-bottom: 1.5rem;
     opacity: 0;
-    animation: fadeUp 0.7s 0.25s ease forwards;
+    animation: fadeUp 0.8s 0.3s cubic-bezier(0.22,1,0.36,1) forwards;
   }
 
-  .hero h1 em {
-    font-style: italic;
-    color: var(--muted);
-  }
+  .hero h1 em { font-style: italic; color: var(--muted); }
 
   .hero-sub {
     font-size: 16px;
@@ -141,14 +297,14 @@
     max-width: 420px;
     margin-bottom: 2.25rem;
     opacity: 0;
-    animation: fadeUp 0.7s 0.4s ease forwards;
+    animation: fadeUp 0.8s 0.45s cubic-bezier(0.22,1,0.36,1) forwards;
   }
 
   .btn-row {
     display: flex;
     gap: 12px;
     opacity: 0;
-    animation: fadeUp 0.7s 0.55s ease forwards;
+    animation: fadeUp 0.8s 0.6s cubic-bezier(0.22,1,0.36,1) forwards;
   }
 
   .btn-primary {
@@ -162,10 +318,22 @@
     color: var(--blue-dark);
     border: none;
     cursor: pointer;
-    transition: opacity 0.2s;
+    position: relative;
+    overflow: hidden;
+    transition: opacity 0.2s, transform 0.15s;
   }
 
-  .btn-primary:hover { opacity: 0.82; }
+  .btn-primary::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.18);
+    transform: translateX(-110%);
+    transition: transform 0.35s ease;
+  }
+
+  .btn-primary:hover::after { transform: translateX(0); }
+  .btn-primary:active { transform: scale(0.97); }
 
   .btn-outline {
     padding: 11px 26px;
@@ -178,10 +346,11 @@
     color: var(--text);
     border: 0.5px solid var(--border2);
     cursor: pointer;
-    transition: border-color 0.2s, color 0.2s;
+    transition: border-color 0.2s, color 0.2s, transform 0.15s;
   }
 
   .btn-outline:hover { border-color: var(--blue-light); color: var(--blue-light); }
+  .btn-outline:active { transform: scale(0.97); }
 
   /* Album art */
   .album-art {
@@ -191,10 +360,21 @@
     border: 0.5px solid var(--border2);
     overflow: hidden;
     opacity: 0;
-    animation: fadeIn 1.1s 0.3s ease forwards;
+    animation: fadeIn 1.2s 0.35s cubic-bezier(0.22,1,0.36,1) forwards;
+    transition: border-color 0.4s;
   }
 
+  .album-art:hover { border-color: rgba(133,183,235,0.4); }
   .album-art svg { display: block; width: 100%; height: 100%; }
+
+  .orbit {
+    animation: spinOrbit 28s linear infinite;
+    transform-origin: 250px 250px;
+  }
+
+  @keyframes spinOrbit {
+    to { transform: rotate(360deg); }
+  }
 
   /* ── SECTIONS COMMON ── */
   section {
@@ -250,7 +430,11 @@
     background: var(--bg2);
     padding: 1.25rem 1rem;
     text-align: center;
+    cursor: default;
+    transition: background 0.25s;
   }
+
+  .stat:hover { background: var(--bg3); }
 
   .stat-val {
     font-size: 28px;
@@ -258,7 +442,10 @@
     color: var(--blue-light);
     line-height: 1;
     margin-bottom: 6px;
+    transition: transform 0.25s ease;
   }
+
+  .stat:hover .stat-val { transform: scale(1.1); }
 
   .stat-lbl {
     font-family: var(--mono);
@@ -282,7 +469,8 @@
     background: var(--bg2);
     padding: 1.5rem 1rem;
     text-align: center;
-    transition: background 0.2s;
+    transition: background 0.25s;
+    cursor: default;
   }
 
   .member:hover { background: var(--bg3); }
@@ -301,13 +489,16 @@
     border: 0.5px solid var(--border2);
     color: var(--blue-light);
     background: rgba(42,95,165,0.15);
+    transition: border-color 0.25s, transform 0.3s cubic-bezier(0.22,1,0.36,1), background 0.25s;
   }
 
-  .member-name {
-    font-size: 14px;
-    font-weight: 500;
-    margin-bottom: 3px;
+  .member:hover .av {
+    border-color: var(--blue-light);
+    transform: scale(1.12);
+    background: rgba(42,95,165,0.28);
   }
+
+  .member-name { font-size: 14px; font-weight: 500; margin-bottom: 3px; }
 
   .member-role {
     font-family: var(--mono);
@@ -322,22 +513,38 @@
   .gallery-mosaic {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: auto auto;
     gap: 8px;
   }
 
-  .gcard { position: relative; overflow: hidden; border: 0.5px solid var(--border); cursor: pointer; }
+  .gcard {
+    position: relative;
+    overflow: hidden;
+    border: 0.5px solid var(--border);
+    cursor: pointer;
+    transition: border-color 0.35s;
+  }
+
+  .gcard:hover { border-color: rgba(133,183,235,0.35); }
   .gcard.wide { grid-column: span 2; }
   .gcard.tall { grid-row: span 2; }
 
   .gcard svg { display: block; width: 100%; height: 100%; }
-  .gcard img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+  .gcard img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.65s cubic-bezier(0.22,1,0.36,1);
+  }
+
+  .gcard:hover img { transform: scale(1.05); }
 
   .gcap {
     position: absolute;
     bottom: 0; left: 0; right: 0;
-    padding: 10px 14px;
-    background: linear-gradient(transparent, rgba(4,12,24,0.82));
+    padding: 12px 14px;
+    background: linear-gradient(transparent, rgba(4,12,24,0.9));
     font-family: var(--mono);
     font-size: 9px;
     font-weight: 300;
@@ -345,10 +552,11 @@
     color: var(--blue-light);
     text-transform: uppercase;
     opacity: 0;
-    transition: opacity 0.3s;
+    transform: translateY(8px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
   }
 
-  .gcard:hover .gcap { opacity: 1; }
+  .gcard:hover .gcap { opacity: 1; transform: translateY(0); }
 
   /* ── EVENTS ── */
   .event-row {
@@ -357,19 +565,37 @@
     gap: 2rem;
     padding: 1.25rem 0;
     border-bottom: 0.5px solid var(--border);
-    transition: background 0.15s;
+    position: relative;
+    transition: padding-left 0.25s ease;
+  }
+
+  .event-row::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 0;
+    background: rgba(133,183,235,0.04);
+    transition: width 0.3s ease;
+    pointer-events: none;
   }
 
   .event-row:first-of-type { border-top: 0.5px solid var(--border); }
-
-  .event-row:hover { background: rgba(255,255,255,0.02); }
+  .event-row:hover { padding-left: 10px; }
+  .event-row:hover::before { width: 100%; }
 
   .date-box {
     min-width: 52px;
+    flex-shrink: 0;
     text-align: center;
     border: 0.5px solid var(--border2);
     padding: 8px 10px;
     background: var(--bg2);
+    transition: border-color 0.25s, background 0.25s;
+  }
+
+  .event-row:hover .date-box {
+    border-color: rgba(133,183,235,0.35);
+    background: var(--bg3);
   }
 
   .date-month {
@@ -388,13 +614,8 @@
     line-height: 1.1;
   }
 
-  .event-info { flex: 1; }
-
-  .event-city {
-    font-size: 16px;
-    font-weight: 500;
-    margin-bottom: 2px;
-  }
+  .event-info { flex: 1; min-width: 0; }
+  .event-city { font-size: 16px; font-weight: 500; margin-bottom: 2px; }
 
   .event-venue {
     font-family: var(--mono);
@@ -402,6 +623,9 @@
     font-weight: 300;
     letter-spacing: 0.08em;
     color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .event-tag {
@@ -412,6 +636,7 @@
     text-transform: uppercase;
     padding: 4px 10px;
     border: 0.5px solid;
+    flex-shrink: 0;
   }
 
   .tag-sold { color: #c46b54; border-color: rgba(196,107,84,0.3); background: rgba(196,107,84,0.08); }
@@ -429,10 +654,12 @@
     border: 0.5px solid rgba(133,183,235,0.3);
     padding: 7px 16px;
     cursor: pointer;
-    transition: background 0.2s, border-color 0.2s;
+    flex-shrink: 0;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
   }
 
   .tickets-btn:hover { background: rgba(133,183,235,0.1); border-color: var(--blue-light); }
+  .tickets-btn:active { transform: scale(0.96); }
 
   /* ── REFERENCES ── */
   .refs-grid {
@@ -446,10 +673,24 @@
   .ref-card {
     background: var(--bg2);
     padding: 2rem;
-    transition: background 0.2s;
+    transition: background 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ref-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    height: 0.5px;
+    width: 0;
+    background: var(--blue-light);
+    opacity: 0.5;
+    transition: width 0.45s cubic-bezier(0.22,1,0.36,1);
   }
 
   .ref-card:hover { background: var(--bg3); }
+  .ref-card:hover::after { width: 100%; }
 
   .ref-score {
     font-size: 42px;
@@ -457,7 +698,10 @@
     color: var(--blue-light);
     line-height: 1;
     margin-bottom: 4px;
+    transition: transform 0.25s ease;
   }
+
+  .ref-card:hover .ref-score { transform: translateX(5px); }
 
   .ref-pub {
     font-family: var(--mono);
@@ -477,7 +721,10 @@
     border-left: 1px solid var(--blue);
     padding-left: 1rem;
     margin-bottom: 0.75rem;
+    transition: border-color 0.25s;
   }
+
+  .ref-card:hover .ref-body { border-color: rgba(133,183,235,0.5); }
 
   .ref-author {
     font-family: var(--mono);
@@ -516,14 +763,14 @@
     text-transform: uppercase;
     color: var(--muted);
     text-decoration: none;
-    transition: color 0.2s;
+    transition: color 0.2s, letter-spacing 0.35s;
   }
 
-  .socials a:hover { color: var(--blue-light); }
+  .socials a:hover { color: var(--blue-light); letter-spacing: 0.2em; }
 
-  /* ── ANIMATIONS ── */
+  /* ── KEYFRAMES ── */
   @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(18px); }
+    from { opacity: 0; transform: translateY(22px); }
     to   { opacity: 1; transform: translateY(0); }
   }
 
@@ -532,37 +779,105 @@
     to   { opacity: 1; }
   }
 
+  /* ── SCROLL REVEAL CLASSES ── */
   .reveal {
     opacity: 0;
-    transform: translateY(22px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
+    transform: translateY(28px);
+    transition: opacity 0.75s cubic-bezier(0.22,1,0.36,1),
+                transform 0.75s cubic-bezier(0.22,1,0.36,1);
   }
 
-  .reveal.visible {
+  .reveal-left {
+    opacity: 0;
+    transform: translateX(-28px);
+    transition: opacity 0.75s cubic-bezier(0.22,1,0.36,1),
+                transform 0.75s cubic-bezier(0.22,1,0.36,1);
+  }
+
+  .reveal-scale {
+    opacity: 0;
+    transform: scale(0.94);
+    transition: opacity 0.75s cubic-bezier(0.22,1,0.36,1),
+                transform 0.75s cubic-bezier(0.22,1,0.36,1);
+  }
+
+  .reveal.visible,
+  .reveal-left.visible,
+  .reveal-scale.visible {
     opacity: 1;
-    transform: translateY(0);
+    transform: none;
   }
 
-  /* ── RESPONSIVE ── */
-  @media (max-width: 768px) {
-    nav { padding: 1rem 1.5rem; }
-    .nav-links { gap: 1.25rem; }
-    .hero { grid-template-columns: 1fr; padding: 4rem 1.5rem; min-height: auto; gap: 2.5rem; }
-    section { padding: 4rem 1.5rem; }
-    .intro-grid { grid-template-columns: 1fr; gap: 2rem; }
+  /* ── RESPONSIVE — TABLET ── */
+  @media (max-width: 900px) {
+    .intro-grid { grid-template-columns: 1fr; gap: 2.5rem; }
     .intro-sticky { position: static; }
     .members-grid { grid-template-columns: repeat(2, 1fr); }
-    .gallery-mosaic { grid-template-columns: 1fr 1fr; }
-    .gcard.wide { grid-column: span 2; }
     .refs-grid { grid-template-columns: 1fr; }
-    footer { flex-direction: column; gap: 1rem; padding: 1.5rem; text-align: center; }
-    .socials { justify-content: center; }
+  }
+
+  /* ── RESPONSIVE — MOBILE ── */
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.25rem; }
+    nav.scrolled { padding: 0.7rem 1.25rem; }
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .mobile-menu { display: flex; }
+
+    .hero {
+      grid-template-columns: 1fr;
+      padding: 3.5rem 1.25rem 3rem;
+      min-height: auto;
+      gap: 2.5rem;
+    }
+
+    .hero h1 { font-size: clamp(38px, 10vw, 52px); }
+    .hero-sub { font-size: 15px; max-width: 100%; }
+    .album-art { max-width: 75vw; margin: 0 auto; }
+
+    section { padding: 3.5rem 1.25rem; }
+    .sec-title { font-size: 28px; margin-bottom: 2rem; }
+
+    .stats { grid-template-columns: repeat(3, 1fr); }
+
+    .gallery-mosaic { grid-template-columns: 1fr; gap: 6px; }
+    .gcard.wide { grid-column: span 1; }
+    .gcard { height: 210px !important; }
+
+    .event-row { gap: 1rem; }
+    .event-row:hover { padding-left: 5px; }
+    .event-city { font-size: 15px; }
+
+    footer {
+      flex-direction: column;
+      gap: 1.25rem;
+      padding: 1.75rem 1.25rem;
+      text-align: center;
+    }
+
+    .socials { justify-content: center; flex-wrap: wrap; gap: 1.25rem 1.75rem; }
+  }
+
+  @media (max-width: 480px) {
+    .btn-row { flex-direction: column; }
+    .btn-primary, .btn-outline { width: 100%; text-align: center; padding: 13px 20px; }
+    .members-grid { grid-template-columns: repeat(2, 1fr); }
+    .intro-body p { font-size: 15px; }
+    .event-venue { font-size: 10px; }
   }
 </style>
 </head>
 <body>
 
-<nav>
+<!-- Mobile overlay menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#intro"       onclick="closeMenu()">Introduction</a>
+  <a href="#gallery"     onclick="closeMenu()">Gallery</a>
+  <a href="#events"      onclick="closeMenu()">Events</a>
+  <a href="#references"  onclick="closeMenu()">References</a>
+</div>
+
+<nav id="mainNav">
   <span class="logo">Hollow Meridian</span>
   <ul class="nav-links">
     <li><a href="#intro">Intro</a></li>
@@ -570,6 +885,9 @@
     <li><a href="#events">Events</a></li>
     <li><a href="#references">References</a></li>
   </ul>
+  <button class="hamburger" id="hamburger" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
 
 <!-- HERO -->
@@ -590,19 +908,22 @@
       <ellipse cx="250" cy="250" rx="160" ry="105" fill="none" stroke="#185FA5" stroke-width="1" opacity="0.45"/>
       <ellipse cx="250" cy="250" rx="120" ry="74" fill="none" stroke="#378ADD" stroke-width="0.9" opacity="0.45"/>
       <ellipse cx="250" cy="250" rx="80" ry="46" fill="none" stroke="#378ADD" stroke-width="0.9" opacity="0.55"/>
-      <ellipse cx="250" cy="250" rx="40" ry="20" fill="none" stroke="#85B7EB" stroke-width="0.8" opacity="0.65"/>
+      <g class="orbit">
+        <ellipse cx="250" cy="250" rx="40" ry="20" fill="none" stroke="#85B7EB" stroke-width="0.8" opacity="0.65"/>
+        <circle cx="250" cy="230" r="3" fill="#85B7EB" opacity="0.75"/>
+      </g>
       <line x1="0" y1="120" x2="500" y2="140" stroke="#378ADD" stroke-width="0.5" opacity="0.28"/>
       <line x1="0" y1="195" x2="500" y2="210" stroke="#378ADD" stroke-width="0.5" opacity="0.2"/>
       <line x1="0" y1="310" x2="500" y2="294" stroke="#378ADD" stroke-width="0.5" opacity="0.2"/>
       <line x1="0" y1="385" x2="500" y2="370" stroke="#378ADD" stroke-width="0.5" opacity="0.28"/>
-      <circle cx="72" cy="72" r="2" fill="#85B7EB" opacity="0.3"/>
-      <circle cx="162" cy="56" r="2" fill="#85B7EB" opacity="0.3"/>
-      <circle cx="350" cy="76" r="2" fill="#85B7EB" opacity="0.3"/>
-      <circle cx="432" cy="62" r="2" fill="#85B7EB" opacity="0.3"/>
-      <circle cx="58" cy="430" r="2" fill="#85B7EB" opacity="0.3"/>
+      <circle cx="72"  cy="72"  r="2" fill="#85B7EB" opacity="0.3"/>
+      <circle cx="162" cy="56"  r="2" fill="#85B7EB" opacity="0.3"/>
+      <circle cx="350" cy="76"  r="2" fill="#85B7EB" opacity="0.3"/>
+      <circle cx="432" cy="62"  r="2" fill="#85B7EB" opacity="0.3"/>
+      <circle cx="58"  cy="430" r="2" fill="#85B7EB" opacity="0.3"/>
       <circle cx="440" cy="420" r="2" fill="#85B7EB" opacity="0.3"/>
       <circle cx="455" cy="186" r="2" fill="#85B7EB" opacity="0.3"/>
-      <circle cx="44" cy="312" r="2" fill="#85B7EB" opacity="0.3"/>
+      <circle cx="44"  cy="312" r="2" fill="#85B7EB" opacity="0.3"/>
       <text x="250" y="476" text-anchor="middle" fill="#B5D4F4" font-size="10" letter-spacing="5" font-family="'DM Mono', monospace" opacity="0.55" font-weight="300">HOLLOW MERIDIAN</text>
     </svg>
   </div>
@@ -611,7 +932,7 @@
 <!-- INTRODUCTION -->
 <section id="intro">
   <div class="intro-grid">
-    <div class="intro-sticky reveal">
+    <div class="intro-sticky reveal-left">
       <p class="sec-label">Introduction</p>
       <p class="sec-title">Who we are</p>
       <div class="stats">
@@ -620,26 +941,10 @@
         <div class="stat"><div class="stat-val">2019</div><div class="stat-lbl">Founded</div></div>
       </div>
       <div class="members-grid" style="margin-top:1px;">
-        <div class="member">
-          <div class="av">MR</div>
-          <div class="member-name">Maires Ribi</div>
-          <div class="member-role">Vocals / Guitar</div>
-        </div>
-        <div class="member">
-          <div class="av">TR</div>
-          <div class="member-name">Toimas Ribi</div>
-          <div class="member-role">Bass</div>
-        </div>
-        <div class="member">
-          <div class="av">PP</div>
-          <div class="member-name">Peeter Porgand</div>
-          <div class="member-role">Drums</div>
-        </div>
-        <div class="member">
-          <div class="av">KK</div>
-          <div class="member-name">Kalle Kartul</div>
-          <div class="member-role">Synths</div>
-        </div>
+        <div class="member"><div class="av">MR</div><div class="member-name">Maires Ribi</div><div class="member-role">Vocals / Guitar</div></div>
+        <div class="member"><div class="av">TR</div><div class="member-name">Toimas Ribi</div><div class="member-role">Bass</div></div>
+        <div class="member"><div class="av">PP</div><div class="member-name">Peeter Porgand</div><div class="member-role">Drums</div></div>
+        <div class="member"><div class="av">KK</div><div class="member-name">Kalle Kartul</div><div class="member-role">Synths</div></div>
       </div>
     </div>
     <div class="intro-body reveal">
@@ -683,54 +988,58 @@
 </footer>
 
 <script>
+/* ── HAMBURGER / MOBILE MENU ── */
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobileMenu');
+
+function openMenu() {
+  hamburger.classList.add('active');
+  mobileMenu.classList.add('open');
+  document.body.classList.add('menu-open');
+}
+
+function closeMenu() {
+  hamburger.classList.remove('active');
+  mobileMenu.classList.remove('open');
+  document.body.classList.remove('menu-open');
+}
+
+hamburger.addEventListener('click', () => {
+  hamburger.classList.contains('active') ? closeMenu() : openMenu();
+});
+
+/* ── NAV SHRINK ON SCROLL ── */
+window.addEventListener('scroll', () => {
+  document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 60);
+}, { passive: true });
+
 /* ── GALLERY ── */
 const photos = [
-  { wide: false,  h: 280, src: "/Band_pic.png", cap: "Band picture — Tallinn, Nov 2024" },
-  { wide: false,  h: 280, src: "/Stage_pic_1.png", cap: "Stage performance" },
-  { wide: false,  h: 280, src: "/Stage_pic_2.png", cap: "Stage performance" },
+  { wide: false, h: 280, src: "/Band_pic.png",    cap: "Band picture — Tallinn, Nov 2024" },
+  { wide: false, h: 280, src: "/Stage_pic_1.png", cap: "Stage performance" },
+  { wide: false, h: 280, src: "/Stage_pic_2.png", cap: "Stage performance" },
 ];
 
 const mosaic = document.getElementById("gallery-mosaic");
 photos.forEach((p, i) => {
-  const w = p.wide ? 660 : 320;
   const div = document.createElement("div");
   div.className = "gcard reveal" + (p.wide ? " wide" : "");
   div.style.height = p.h + "px";
-  if (p.src) {
-    div.innerHTML = `
-    <img src="${p.src}" alt="${p.cap}">
-    <div class="gcap">${p.cap}</div>`;
-    mosaic.appendChild(div);
-    return;
-  }
-
-  div.innerHTML = `
-    <svg viewBox="0 0 ${w} ${p.h}" xmlns="http://www.w3.org/2000/svg">
-      <rect width="${w}" height="${p.h}" fill="${p.bg}"/>
-      <line x1="0" y1="${p.h*0.28}" x2="${w}" y2="${p.h*0.33}" stroke="${p.stroke}" stroke-width="0.7" opacity="0.4"/>
-      <line x1="0" y1="${p.h*0.62}" x2="${w}" y2="${p.h*0.59}" stroke="${p.stroke}" stroke-width="0.7" opacity="0.28"/>
-      <ellipse cx="${w*0.5}" cy="${p.h*0.48}" rx="${w*0.28}" ry="${p.h*0.24}" fill="none" stroke="${p.accent}" stroke-width="0.9" opacity="0.4"/>
-      <ellipse cx="${w*0.5}" cy="${p.h*0.48}" rx="${w*0.16}" ry="${p.h*0.13}" fill="none" stroke="${p.accent}" stroke-width="0.7" opacity="0.5"/>
-      <circle cx="${w*0.12}" cy="${p.h*0.15}" r="1.8" fill="${p.accent}" opacity="0.32"/>
-      <circle cx="${w*0.88}" cy="${p.h*0.12}" r="1.8" fill="${p.accent}" opacity="0.32"/>
-      <circle cx="${w*0.05}" cy="${p.h*0.85}" r="1.8" fill="${p.accent}" opacity="0.25"/>
-      <circle cx="${w*0.95}" cy="${p.h*0.82}" r="1.8" fill="${p.accent}" opacity="0.25"/>
-      <text x="14" y="${p.h-13}" fill="${p.accent}" font-size="9" font-family="'DM Mono',monospace" font-weight="300" opacity="0.55" letter-spacing="1">${p.cap}</text>
-    </svg>
-    <div class="gcap">${p.cap}</div>`;
+  div.style.transitionDelay = (i * 0.09) + "s";
+  div.innerHTML = `<img src="${p.src}" alt="${p.cap}"><div class="gcap">${p.cap}</div>`;
   mosaic.appendChild(div);
 });
 
 /* ── EVENTS ── */
 const events = [
-  { month:"Apr", day:"18", city:"Tallinn, Estonia",       venue:"Kultuurikatel",     status:"sold" },
-  { month:"Apr", day:"25", city:"Helsinki, Finland",       venue:"Tavastia Club",     status:"few"  },
-  { month:"May", day:"03", city:"Riga, Latvia",            venue:"Palladium",         status:"avail"},
-  { month:"May", day:"11", city:"Berlin, Germany",         venue:"Lido",              status:"avail"},
-  { month:"May", day:"19", city:"Amsterdam, Netherlands",  venue:"Paradiso",          status:"avail"},
-  { month:"Jun", day:"07", city:"London, United Kingdom",  venue:"Scala",             status:"avail"},
-  { month:"Jun", day:"21", city:"Kuressaare, Estonia",     venue:"Keset KG metsa",   status:"few"  },
-  { month:"Jul", day:"04", city:"Copenhagen, Denmark",     venue:"Vega",              status:"avail"},
+  { month:"Apr", day:"18", city:"Tallinn, Estonia",       venue:"Kultuurikatel",     status:"sold"  },
+  { month:"Apr", day:"25", city:"Helsinki, Finland",       venue:"Tavastia Club",     status:"few"   },
+  { month:"May", day:"03", city:"Riga, Latvia",            venue:"Palladium",         status:"avail" },
+  { month:"May", day:"11", city:"Berlin, Germany",         venue:"Lido",              status:"avail" },
+  { month:"May", day:"19", city:"Amsterdam, Netherlands",  venue:"Paradiso",          status:"avail" },
+  { month:"Jun", day:"07", city:"London, United Kingdom",  venue:"Scala",             status:"avail" },
+  { month:"Jun", day:"21", city:"Kuressaare, Estonia",     venue:"Keset KG metsa",    status:"few"   },
+  { month:"Jul", day:"04", city:"Copenhagen, Denmark",     venue:"Vega",              status:"avail" },
 ];
 
 const tagLabel = { sold:"Sold out", few:"Few left", avail:"Tickets" };
@@ -740,6 +1049,7 @@ const eList = document.getElementById("event-list");
 events.forEach((e, i) => {
   const row = document.createElement("div");
   row.className = "event-row reveal";
+  row.style.transitionDelay = (i * 0.055) + "s";
   const action = e.status === "sold"
     ? `<span class="event-tag ${tagClass[e.status]}">${tagLabel[e.status]}</span>`
     : `<button class="tickets-btn">${tagLabel[e.status]}</button>`;
@@ -758,32 +1068,17 @@ events.forEach((e, i) => {
 
 /* ── REFERENCES ── */
 const refs = [
-  {
-    score: "8.2 / 10", pub: " ",
-    body: "Like Sigur Rós if they grew up on the Baltic Sea and didn't believe in resolution. Static Cartography is an album about the unbearable weight of almost.",
-    author: "— Anna Holt, Pitchfork"
-  },
-  {
-    score: "9 / 10", pub: " ",
-    body: "Hollow Meridian understand that the best post-rock has always been about restraint, not release. They've made something genuinely unusual here.",
-    author: "— James Pryor, The Wire"
-  },
-  {
-    score: "8 / 10", pub: " ",
-    body: "A debut that sounds fully formed and quietly devastating. Kira Voss's voice is the lighthouse the album is named after — distant, guiding, cold.",
-    author: "— Karlsson katuselt"
-  },
-  {
-    score: "8.5 / 10", pub: " ",
-    body: "Dance music this is not, but the rhythmic intelligence Marika Saar brings to the kit makes Static Cartography essential listening across genres.",
-    author: "— Karl Gregor Rauniste"
-  },
+  { score:"8.2 / 10", pub:" ", body:"Like Sigur Rós if they grew up on the Baltic Sea and didn't believe in resolution. Static Cartography is an album about the unbearable weight of almost.", author:"— Anna Holt, Pitchfork" },
+  { score:"9 / 10",   pub:" ", body:"Hollow Meridian understand that the best post-rock has always been about restraint, not release. They've made something genuinely unusual here.", author:"— James Pryor, The Wire" },
+  { score:"8 / 10",   pub:" ", body:"A debut that sounds fully formed and quietly devastating. Kira Voss's voice is the lighthouse the album is named after — distant, guiding, cold.", author:"— Karlsson katuselt" },
+  { score:"8.5 / 10", pub:" ", body:"Dance music this is not, but the rhythmic intelligence Marika Saar brings to the kit makes Static Cartography essential listening across genres.", author:"— Karl Gregor Rauniste" },
 ];
 
 const rGrid = document.getElementById("refs-grid");
-refs.forEach(r => {
+refs.forEach((r, i) => {
   const card = document.createElement("div");
-  card.className = "ref-card reveal";
+  card.className = "ref-card reveal-scale";
+  card.style.transitionDelay = (i * 0.1) + "s";
   card.innerHTML = `
     <div class="ref-score">${r.score}</div>
     <div class="ref-pub">${r.pub}</div>
@@ -793,45 +1088,16 @@ refs.forEach(r => {
 });
 
 /* ── SCROLL REVEAL ── */
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("visible"); observer.unobserve(e.target); } });
-}, { threshold: 0.1 });
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add("visible");
+      revealObs.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.08 });
 
-document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
+document.querySelectorAll(".reveal, .reveal-left, .reveal-scale").forEach(el => revealObs.observe(el));
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
